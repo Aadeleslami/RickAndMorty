@@ -1,4 +1,5 @@
-import { character } from "../../data/data";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
+import { character, episodes } from "../../data/data";
 
 function CharacterDetails() {
   return (
@@ -15,7 +16,9 @@ function CharacterDetails() {
             <span>&nbsp;{character.name}</span>
           </h3>
           <div className="info">
-            <span className={`status ${character.status ==="Dead"? "red":""}`}></span>
+            <span
+              className={`status ${character.status === "Dead" ? "red" : ""}`}
+            ></span>
             <span>&nbsp;{character.status}</span>
             <span> -&nbsp;{character.species}</span>
           </div>
@@ -29,7 +32,25 @@ function CharacterDetails() {
         </div>
       </div>
 
-      <div className="character-episodes"></div>
+      <div className="character-episodes">
+        <div className="title">
+          <h2>List Of Episodes:</h2>
+          <button>
+            <ArrowDownCircleIcon className="icon" />
+          </button>
+        </div>
+        <ul>
+          {episodes.map((item,index) => (
+            <li key={item.id}>
+              <div>
+               {String(index +1).padStart(2,"0")} {item.episode}:
+                <strong> {item.name}</strong>
+              </div>
+              <div className="badge badge--secondary">{item.air_date}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
