@@ -2,8 +2,8 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 import { allCharacters } from "../../data/data";
 import { useState } from "react";
 import SkeletonLoader from "./SkeletonLoader";
-function CharacterList({characters ,isLoading }) {
-if(isLoading) return <SkeletonLoader/>
+function CharacterList({characters , isLoading }) {
+if(isLoading) return <SkeletonLoader />
   return (
     <div className="characters-list">
       {characters.map((item) => (
