@@ -34,10 +34,8 @@ function App() {
     fetchData();
   }, [query]);
   const handleSelectedCharacter = (id) => {
-    setSelectedId(prevId => prevId === id ? null : id);
+    setSelectedId((prevId) => (prevId === id ? null : id));
   };
-  
-  
 
   return (
     <div className="app">
@@ -48,7 +46,7 @@ function App() {
       </Navbar>
       <Main>
         <CharacterList
-        selectedId={selectedId}
+          selectedId={selectedId}
           characters={character}
           isLoading={isLoading}
           onSelectedCharacter={handleSelectedCharacter}

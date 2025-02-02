@@ -13,10 +13,11 @@ function CharacterDetails({ selectedId }) {
       try {
         setIsLoading(true)
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character/${selectedId}`
+          `https://rickandmortyapi.com/api/characters/${selectedId}`
         );
         setCharacter(data);
       } catch (err) {
+        
         toast.error(err.response.data.error);
       }finally{
         setIsLoading(false)
