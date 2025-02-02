@@ -34,7 +34,7 @@ function App() {
     fetchData();
   }, [query]);
   const handleSelectedCharacter = (id) => {
-    setSelectedId(id);
+    setSelectedId(prevId => prevId === id ? null : id);
   };
   
   
@@ -48,6 +48,7 @@ function App() {
       </Navbar>
       <Main>
         <CharacterList
+        selectedId={selectedId}
           characters={character}
           isLoading={isLoading}
           onSelectedCharacter={handleSelectedCharacter}

@@ -1,16 +1,39 @@
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
-import { character, episodes } from "../../data/data";
-import { useEffect } from "react";
+import { episodes } from "../../data/data";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { SkeletonCharacter } from "./SkeletonLoader";
 
-function CharacterDetails({selectedId}) {
-  useEffect(()=>{
-   async function fetchData(){
-      const res = await axios.get(`https://rickandmortyapi.com/api/character?id=${selectedId}`)
-      console.log(res);
-      
+function CharacterDetails({ selectedId }) {
+  const [character, setCharacter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true)
+        const { data } = await axios.get(
+          `https://rickandmortyapi.com/api/character/${selectedId}`
+        );
+        setCharacter(data);
+      } catch (err) {
+        toast.error(err.response.data.error);
+      }finally{
+        setIsLoading(false)
+      }
     }
-  },[])
+
+     if (selectedId) fetchData()
+  }, [selectedId]);
+
+  if(isLoading) return <SkeletonCharacter/>
+
+  if (!character || !selectedId)
+    return (
+      <div style={{ flex: 1, color: "var(--slate-300)" }}>
+        Please Select Character
+      </div>
+    );
   return (
     <div style={{ flex: 1 }}>
       <div className="character-detail">
@@ -49,10 +72,10 @@ function CharacterDetails({selectedId}) {
           </button>
         </div>
         <ul>
-          {episodes.map((item,index) => (
+          {episodes.map((item, index) => (
             <li key={item.id}>
               <div>
-               {String(index +1).padStart(2,"0")} {item.episode}:
+                {String(index + 1).padStart(2, "0")} {item.episode}:
                 <strong> {item.name}</strong>
               </div>
               <div className="badge badge--secondary">{item.air_date}</div>

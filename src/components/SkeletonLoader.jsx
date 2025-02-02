@@ -1,4 +1,4 @@
-
+import { LoaderIcon } from "react-hot-toast";
 
 const SkeletonLoader = () => {
   return (
@@ -60,3 +60,21 @@ const SkeletonLoader = () => {
 };
 
 export default SkeletonLoader;
+
+export const SkeletonCharacter = () => {
+  return (
+    <div
+    style={{
+      flex:1,
+      color: "var(--slate-300)",
+      display: "flex",
+      alignItems: "start",
+      gap: "1rem",
+    }}
+   
+  >
+   <p> Loading Data...</p>
+    <LoaderIcon style={{ width: "1.3rem", height: "1.3rem" }} />
+  </div>
+  );
+};
