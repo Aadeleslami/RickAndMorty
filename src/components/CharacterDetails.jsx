@@ -1,4 +1,8 @@
-import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownCircleIcon,
+  CheckCircleIcon,
+  TicketIcon,
+} from "@heroicons/react/24/outline";
 import { episodes } from "../../data/data";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -67,7 +71,16 @@ function CharacterDetails({ selectedId, onAddToFavorite, isAddedToFavorite }) {
           </div>
           <div className="actions">
             {isAddedToFavorite ? (
-              <p>Already Add To Favorites</p>
+              <p
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                Already Add To Favorites{" "}
+                <CheckCircleIcon height={32} width={32} color="green" />{" "}
+              </p>
             ) : (
               <button
                 onClick={() => onAddToFavorite(character)}
