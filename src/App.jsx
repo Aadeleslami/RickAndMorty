@@ -57,7 +57,7 @@ function App() {
     setFavorite((prevFav) => [...prevFav, char]);
   };
   const isAddedToFavorite = favorite.map((fav) => fav.id).includes(selectedId);
-  console.log(favorite);
+
 
   return (
     <div className="app">
