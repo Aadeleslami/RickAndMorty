@@ -12,18 +12,24 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [favorite , setFavorite] =useState([])
+  const [favorite, setFavorite] = useState([]);
+  const [count, setCount] = useState(0);
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function fetchData() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character?name=${query}`
+          `https://rickandmortyapi.com/api/character?name=${query}`,
+          { signal }
         );
         setCharacter(data.results.slice(0, 5));
       } catch (err) {
-        setCharacter([]);
-        toast.error(err.response.data.error);
+        if (!axios.Cancel()) {
+          setCharacter([]);
+          toast.error(err.response.data.error);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -33,18 +39,29 @@ function App() {
       return;
     }
     fetchData();
+    return () => {
+      controller.abort();
+    };
   }, [query]);
+
+  useEffect(() => {
+    const interval = setInterval(() => setCount((c) => c + 1), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [count]);
   const handleSelectedCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
   };
-  const handleAddToFavorite = (char)=>{
-    setFavorite(prevFav => [...prevFav,char])
-  }
-  const isAddedToFavorite = favorite.map(fav => fav.id).includes(selectedId)
-console.log(favorite);
+  const handleAddToFavorite = (char) => {
+    setFavorite((prevFav) => [...prevFav, char]);
+  };
+  const isAddedToFavorite = favorite.map((fav) => fav.id).includes(selectedId);
+  console.log(favorite);
 
   return (
     <div className="app">
+      <div style={{ color: "#ffff" }}>{count}</div>
       <Toaster />
       <Navbar>
         <Search query={query} setQuery={setQuery} />
@@ -57,11 +74,12 @@ console.log(favorite);
           characters={character}
           isLoading={isLoading}
           onSelectedCharacter={handleSelectedCharacter}
-          
         />
-        <CharacterDetails selectedId={selectedId} 
-        onAddToFavorite={handleAddToFavorite}
-        isAddedToFavorite={isAddedToFavorite}/>
+        <CharacterDetails
+          selectedId={selectedId}
+          onAddToFavorite={handleAddToFavorite}
+          isAddedToFavorite={isAddedToFavorite}
+        />
       </Main>
     </div>
   );
