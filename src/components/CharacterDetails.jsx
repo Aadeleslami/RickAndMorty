@@ -5,29 +5,35 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { SkeletonCharacter } from "./SkeletonLoader";
 
-function CharacterDetails({ selectedId }) {
+function CharacterDetails({ selectedId, onAddToFavorite, isAddedToFavorite }) {
   const [character, setCharacter] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [episodes, setEpisodes] = useState([]);
   useEffect(() => {
     async function fetchData() {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/characters/${selectedId}`
+          `https://rickandmortyapi.com/api/character/${selectedId}`
         );
         setCharacter(data);
+        const episodeId = data.episode.map((e) => e.split("/").at(-1));
+        const { data: episodeData } = await axios.get(
+          `https://rickandmortyapi.com/api/episode/${episodeId}`
+        );
+
+        setEpisodes([episodeData].flat().slice(0, 5));
       } catch (err) {
-        
         toast.error(err.response.data.error);
-      }finally{
-        setIsLoading(false)
+      } finally {
+        setIsLoading(false);
       }
     }
 
-     if (selectedId) fetchData()
+    if (selectedId) fetchData();
   }, [selectedId]);
 
-  if(isLoading) return <SkeletonCharacter/>
+  if (isLoading) return <SkeletonCharacter />;
 
   if (!character || !selectedId)
     return (
@@ -59,8 +65,17 @@ function CharacterDetails({ selectedId }) {
             <p>Last known location: </p>
             <p>{character.location.name}</p>
           </div>
-          <div className="action">
-            <button className="btn btn--primary">Add to Favourite</button>
+          <div className="actions">
+            {isAddedToFavorite ? (
+              <p>Already Add To Favorites</p>
+            ) : (
+              <button
+                onClick={() => onAddToFavorite(character)}
+                className="btn btn--primary"
+              >
+                Add to Favorite
+              </button>
+            )}
           </div>
         </div>
       </div>
