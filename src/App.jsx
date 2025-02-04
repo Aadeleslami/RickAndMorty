@@ -13,7 +13,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [favorite, setFavorite] = useState([]);
-  const [count, setCount] = useState(0);
+ 
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -26,47 +26,47 @@ function App() {
         );
         setCharacter(data.results.slice(0, 5));
       } catch (err) {
-        if (!axios.Cancel()) {
-          setCharacter([]);
+        
+       setCharacter([])
           toast.error(err.response.data.error);
-        }
+      
       } finally {
         setIsLoading(false);
       }
     }
-    if (query.length < 3) {
-      setCharacter([]);
-      return;
-    }
+    
     fetchData();
     return () => {
       controller.abort();
     };
   }, [query]);
 
-  useEffect(() => {
-    const interval = setInterval(() => setCount((c) => c + 1), 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [count]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => setCount((c) => c + 1), 1000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [count]);
   const handleSelectedCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
   };
   const handleAddToFavorite = (char) => {
     setFavorite((prevFav) => [...prevFav, char]);
   };
+  const handleDeleteFavorite = (id) =>{
+    setFavorite(preFav => preFav.filter(fav => fav.id !== id))
+  }
   const isAddedToFavorite = favorite.map((fav) => fav.id).includes(selectedId);
-
+  
 
   return (
     <div className="app">
-      <div style={{ color: "#ffff" }}>{count}</div>
+      {/* <div style={{ color: "#ffff" }}>{count}</div> */}
       <Toaster />
       <Navbar>
         <Search query={query} setQuery={setQuery} />
-        <SearchResult numOfResult={character.length} />
-        <Favorite numOfFavorite={favorite.length} />
+        <SearchResult numOfResult={character.length}  />
+        <Favorite favorite={favorite} onDeleteFavorite ={handleDeleteFavorite} />
       </Navbar>
       <Main>
         <CharacterList

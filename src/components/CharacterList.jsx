@@ -1,6 +1,4 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { allCharacters } from "../../data/data";
-import { useState } from "react";
 import SkeletonLoader from "./SkeletonLoader";
 function CharacterList({
   characters,
@@ -12,12 +10,14 @@ function CharacterList({
   return (
     <div className="characters-list">
       {characters.map((item) => (
-        <Character
-          key={item.id}
-          item={item}
-          onSelectedCharacter={onSelectedCharacter}
-          selectedId={selectedId}
-        />
+        <Character key={item.id} item={item}>
+          <button
+            className="icon red"
+            onClick={() => onSelectedCharacter(item.id)}
+          >
+            {selectedId === item.id ? <EyeSlashIcon /> : <EyeIcon />}
+          </button>
+        </Character>
       ))}
     </div>
   );
@@ -25,16 +25,13 @@ function CharacterList({
 
 export default CharacterList;
 
-function Character({ item, onSelectedCharacter, selectedId }) {
+export function Character({ item, children }) {
   return (
     <div className="list__item">
       <img src={item.image} alt={item.name} />
       <CharacterName item={item} />
       <CharacterInfo item={item} />
-
-      <button className="icon red" onClick={() => onSelectedCharacter(item.id)}>
-        {selectedId === item.id ? <EyeSlashIcon /> : <EyeIcon />}
-      </button>
+      {children}
     </div>
   );
 }

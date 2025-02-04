@@ -119,7 +119,7 @@ function EpisodesList ({episodes}){
       <h2>List Of Episodes:</h2>
       <button onClick={()=>setSortBy(is => !is)}>
         <ArrowUpCircleIcon className="icon" style={{rotate:sortBy ? "0deg":"180deg"}} />
-      </button>
+      </button> 
     </div>
     <ul>
       {episodeSort.map((item, index) => (
