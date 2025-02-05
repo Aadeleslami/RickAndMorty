@@ -12,7 +12,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [favorite, setFavorite] = useState([]);
+  const [favorite, setFavorite] = useState(()=>JSON.parse(localStorage.getItem("FAVORITE"))||[]);
  
   useEffect(() => {
     const controller = new AbortController();
@@ -47,6 +47,9 @@ function App() {
   //     clearInterval(interval);
   //   };
   // }, [count]);
+  useEffect(()=>{
+    localStorage.setItem("FAVORITE",JSON.stringify(favorite))
+  },[favorite])
   const handleSelectedCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
   };
